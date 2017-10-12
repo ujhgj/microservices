@@ -44,3 +44,14 @@
     && docker run -d --network=reddit \
         -p 9292:9292 \
         ujhgj/ui:3.0
+
+
+Для использования файла docker-compose:
+
+
+    cp .env.sample .env
+
+и заполнить переменные окружения, после чего можно использовать команду
+
+
+    docker-compose up -d
