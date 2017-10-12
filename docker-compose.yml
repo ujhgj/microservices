@@ -24,7 +24,7 @@ services:
       - front_net
       - back_net
   comment:
-    build: ./ui
+    build: ./comment
     image: ${USERNAME}/comment:${COMMENT_VERSION}
     networks:
       - front_net
