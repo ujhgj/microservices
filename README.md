@@ -44,3 +44,20 @@
     && docker run -d --network=reddit \
         -p 9292:9292 \
         ujhgj/ui:3.0
+
+
+Для использования файла docker-compose:
+
+
+    cp .env.sample .env
+
+и заполнить переменные окружения. Далее, создать сети front_net и back_net, например,
+
+
+    docker network create back_net --subnet=10.0.2.0/24
+    docker network create front_net --subnet=10.0.1.0/24
+
+после чего можно использовать команду
+
+
+    docker-compose up -d
