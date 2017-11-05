@@ -10,6 +10,7 @@ services:
         aliases:
           - post_db
           - comment_db
+          - mongo
   ui:
     image: ${USERNAME}/ui:${UI_VERSION}
     ports:
@@ -46,6 +47,12 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    networks:
+      - back_net
+
+  mongo-exporter:
+    image: eses/mongodb_exporter:latest
+    entrypoint: ./mongodb_exporter -mongodb.uri mongodb://mongo:27017
     networks:
       - back_net
 
