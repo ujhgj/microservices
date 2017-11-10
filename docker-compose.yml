@@ -73,7 +73,6 @@ services:
     networks:
       - prometheus_net
 
-
   grafana:
     image: grafana/grafana
     volumes:
@@ -85,6 +84,15 @@ services:
       - prometheus
     ports:
       - 3000:3000
+    networks:
+      - prometheus_net
+
+  alertmanager:
+    image: ${USERNAME}/alertmanager
+    command:
+      - '-config.file=/etc/alertmanager/config.yml'
+    ports:
+      - 9093:9093
     networks:
       - prometheus_net
 

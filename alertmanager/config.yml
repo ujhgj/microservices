@@ -1,0 +1,8 @@
+route:
+ receiver: slack
+
+receivers:
+- name: slack
+  slack_configs:
+  - api_url: https://hooks.slack.com/services/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
+    channel: '#aleksandr-kovytin'
