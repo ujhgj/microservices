@@ -20,9 +20,11 @@ prometheus = Prometheus::Client.registry
 ui_health_gauge = Prometheus::Client::Gauge.new(:ui_health, 'Health status of UI service')
 ui_health_post_gauge = Prometheus::Client::Gauge.new(:ui_health_post_availability, 'Check if Post service is available to UI')
 ui_health_comment_gauge = Prometheus::Client::Gauge.new(:ui_health_comment_availability, 'Check if Comment service is available to UI')
+ui_index_page_load_count = Prometheus::Client::Counter.new(:ui_index_page_load_count, 'A counter of index page loads')
 prometheus.register(ui_health_gauge)
 prometheus.register(ui_health_post_gauge)
 prometheus.register(ui_health_comment_gauge)
+prometheus.register(ui_index_page_load_count)
 
 ## Schedule healthcheck function
 build_info=File.readlines('build_info.txt')
@@ -46,8 +48,8 @@ before do
   session[:flashes] = [] if session[:flashes].class != Array
 end
 
-
 get '/' do
+  ui_index_page_load_count.increment
   @title = 'All posts'
   begin
     @posts = JSON.parse(RestClient::Request.execute(method: :get, url: "http://#{post_service_host}:#{post_service_port}/posts", timeout: 1))
