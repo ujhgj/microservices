@@ -1,0 +1,92 @@
+version: '3.3'
+
+services:
+  prometheus:
+    image: ${USER_NAME}/prometheus
+    deploy:
+      placement:
+        constraints:
+          - node.labels.reliability == high
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    networks:
+      - prometheus_net
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    deploy:
+      mode: global
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    networks:
+      - prometheus_net
+
+  mongo-exporter:
+    image: eses/mongodb_exporter:latest
+    entrypoint: ./mongodb_exporter -mongodb.uri mongodb://mongo:27017
+    deploy:
+      placement:
+        constraints:
+          - node.labels.reliability == high
+    networks:
+      - prometheus_net
+
+  cadvisor:
+    image: google/cadvisor:latest
+    deploy:
+      placement:
+        constraints:
+          - node.labels.reliability == high
+    volumes:
+      - '/:/rootfs:ro'
+      - '/var/run:/var/run:rw'
+      - '/sys:/sys:ro'
+      - '/var/lib/docker/:/var/lib/docker:ro'
+    ports:
+      - ${CADVISOR_PORT}:8080
+    networks:
+      - prometheus_net
+
+  grafana:
+    image: grafana/grafana
+    deploy:
+      placement:
+        constraints:
+          - node.labels.reliability == high
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=secret
+    depends_on:
+      - prometheus
+    ports:
+      - ${GRAFANA_PORT}:3000
+    networks:
+      - prometheus_net
+
+  alertmanager:
+    image: ${USER_NAME}/alertmanager
+    deploy:
+      placement:
+        constraints:
+          - node.labels.reliability == high
+    command:
+      - '-config.file=/etc/alertmanager/config.yml'
+    ports:
+      - ${ALERTMANAGER_PORT}:9093
+    networks:
+      - prometheus_net
+
+volumes:
+  grafana_data:
+
+networks:
+  prometheus_net: {}

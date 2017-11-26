@@ -55,3 +55,10 @@
 
 
     docker-compose up -d
+
+Использование Swarm в нескольких окружениях
+
+    cp .env.sample environment/dev.env
+    docker stack deploy --compose-file=<(sh swarm_conf.sh dev 2>/dev/null) DEV
+    cp .env.sample environment/prod.env
+    docker stack deploy --compose-file=<(sh swarm_conf.sh prod 2>/dev/null) ANOTHER_STACK
