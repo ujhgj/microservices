@@ -75,7 +75,7 @@ services:
   ui:
     image: ${USER_NAME}/ui:${UI_VERSION}
     environment:
-      - APP_ENVIRONMENT
+      - ENV=${APP_ENVIRONMENT}
     deploy:
       restart_policy:
         condition: on-failure
