@@ -28,6 +28,8 @@ prometheus.register(ui_index_page_load_count)
 
 ## Schedule healthcheck function
 build_info=File.readlines('build_info.txt')
+@@host_info=ENV['HOSTNAME']
+@@env_info=ENV['ENV']
 
 scheduler = Rufus::Scheduler.new
 
