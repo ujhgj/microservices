@@ -21,7 +21,7 @@ spec:
         component: ui
     spec:
       containers:
-      - image: chromko/ui
+      - image: ujhgj/ui
         name: ui
         env:
         - name: ENV
