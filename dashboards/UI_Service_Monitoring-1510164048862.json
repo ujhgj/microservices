@@ -1,8 +1,8 @@
 {
   "__inputs": [
     {
-      "name": "DS_PROMETHEUS_SERVER",
-      "label": "Prometheus Server",
+      "name": "DS_HTTP://35.198.163.2",
+      "label": "http://35.198.163.2",
       "description": "",
       "type": "datasource",
       "pluginId": "prometheus",
@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "4.6.1"
+      "version": "4.6.3"
     },
     {
       "type": "panel",
@@ -48,6 +48,7 @@
   "hideControls": false,
   "id": null,
   "links": [],
+  "refresh": false,
   "rows": [
     {
       "collapse": false,
@@ -58,7 +59,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS_SERVER}",
+          "datasource": "${DS_HTTP://35.198.163.2}",
           "fill": 1,
           "id": 1,
           "legend": {
@@ -85,7 +86,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "ui_request_count",
+              "expr": "ui_request_count{namespace=~\"$namespace\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A"
@@ -144,7 +145,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS_SERVER}",
+          "datasource": "${DS_HTTP://35.198.163.2}",
           "fill": 1,
           "id": 3,
           "legend": {
@@ -171,7 +172,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(ui_request_count{http_status=~\"^[45].*\"}[5m])",
+              "expr": "rate(ui_request_count{http_status=~\"^[45].*\",namespace=~\"$namespace\"}[5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A"
@@ -230,7 +231,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS_SERVER}",
+          "datasource": "${DS_HTTP://35.198.163.2}",
           "fill": 1,
           "id": 4,
           "legend": {
@@ -312,11 +313,32 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "${DS_HTTP://35.198.163.2}",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Env",
+        "multi": true,
+        "name": "namespace",
+        "options": [],
+        "query": "label_values(namespace)",
+        "refresh": 1,
+        "regex": "/.*/",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
   },
   "time": {
-    "from": "now-15m",
-    "to": "now"
+    "from": "2018-01-17T15:05:16.631Z",
+    "to": "2018-01-17T15:35:16.631Z"
   },
   "timepicker": {
     "refresh_intervals": [
